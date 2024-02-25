@@ -86,9 +86,9 @@ val releaseArtifact = project.artifacts.add("gomobile", releaseAarFile) {
 publishing {
   publications {
     create<MavenPublication>("maven") {
-      groupId = "com.nononsenseapps.gofeed"
+      groupId = rootProject.group.toString()
       artifactId = "gofeed-android"
-      version = "0.1.0"
+      version = rootProject.version.toString()
 
       artifact(releaseArtifact)
 
