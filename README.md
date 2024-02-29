@@ -36,6 +36,16 @@ gomobile init
 ./gradlew publish
 ```
 
+Then go to https://oss.sonatype.org/#stagingRepositories and close and release the repository.
+
+## Updating gofeed
+
+Exclude commit/version to get latest version.
+
+```
+go get -u github.com/mmcdole/gofeed@[COMMIT/VERSION]
+```
+
 # Tests in downstream project
 
 If you want to include the bindings in unit tests, they must run as Android instrumentation tests (emulator tests).
