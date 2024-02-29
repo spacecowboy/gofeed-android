@@ -84,6 +84,18 @@ val releaseArtifact = project.artifacts.add("gomobile", releaseAarFile) {
 }
 
 publishing {
+  repositories {
+    maven {
+      name = "MavenCentral"
+      url = uri("https://oss.sonatype.org/service/local/staging/deploy/maven2")
+      val nexusUsername: String by project
+      val nexusPassword: String by project
+      credentials {
+        username = nexusUsername
+        password = nexusPassword
+      }
+    }
+  }
   publications {
     create<MavenPublication>("maven") {
       groupId = rootProject.group.toString()
