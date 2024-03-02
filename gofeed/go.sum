@@ -17,12 +17,16 @@ github.com/mmcdole/gofeed v1.2.2-0.20240223183105-454d6a3b65eb h1:wYqkBzuGsw6c5u
 github.com/mmcdole/gofeed v1.2.2-0.20240223183105-454d6a3b65eb/go.mod h1:2wVInNpgmC85q16QTTuwbuKxtKkHLCDDtf0dCmnrNr4=
 github.com/mmcdole/goxpp v1.1.0 h1:WwslZNF7KNAXTFuzRtn/OKZxFLJAAyOA9w82mDz2ZGI=
 github.com/mmcdole/goxpp v1.1.0/go.mod h1:v+25+lT2ViuQ7mVxcncQ8ch1URund48oH+jhjiwEgS8=
+github.com/mmcdole/goxpp v1.1.1 h1:RGIX+D6iQRIunGHrKqnA2+700XMCnNv0bAOOv5MUhx8=
+github.com/mmcdole/goxpp v1.1.1/go.mod h1:v+25+lT2ViuQ7mVxcncQ8ch1URund48oH+jhjiwEgS8=
 github.com/modern-go/concurrent v0.0.0-20180228061459-e0a39a4cb421/go.mod h1:6dJC0mAP4ikYIbvyc7fijjWJddQyLn8Ig3JB5CqoB9Q=
 github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd h1:TRLaZ9cD/w8PVh93nsPXa1VrQ6jlwL5oN8l14QlcNfg=
 github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd/go.mod h1:6dJC0mAP4ikYIbvyc7fijjWJddQyLn8Ig3JB5CqoB9Q=
 github.com/modern-go/reflect2 v1.0.2 h1:xBagoLtFs94CBntxluKeaWgTMpvLxC4ur3nMaC9Gz0M=
 github.com/modern-go/reflect2 v1.0.2/go.mod h1:yWuevngMOJpCy52FWWMvUC8ws7m/LJsjYzDa0/r8luk=
 github.com/pmezard/go-difflib v1.0.0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZNVY4sRDYZ/4=
+github.com/spacecowboy/gofeed v1.3.0-feeder h1:sRoCQ+VV8C/kbdFLzxZ1eboA8zMO4vHITyzJ9ZCtTiw=
+github.com/spacecowboy/gofeed v1.3.0-feeder/go.mod h1:9TGv2LcJhdXePDzxiuMnukhV2/zb6VtnZt1mS+SjkLE=
 github.com/stretchr/objx v0.1.0/go.mod h1:HFkY916IF+rwdDfMAkV7OtwuqBVzrE8GR6GFx+wExME=
 github.com/stretchr/testify v1.3.0/go.mod h1:M5WIy9Dh21IEIfnGCwXGc5bZfKNJtfHm1UVUgZn+9EI=
 github.com/yuin/goldmark v1.4.13/go.mod h1:6yULJ656Px+3vBD8DxQVa3kxgyrAnzto9xy5taEt/CY=
