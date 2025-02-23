@@ -2,7 +2,7 @@ on:
   push:
     branches:
       - main
-      - release-please-testing
+      - release-please
   workflow_dispatch:
 
 permissions:
