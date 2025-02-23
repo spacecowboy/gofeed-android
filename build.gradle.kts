@@ -1,4 +1,4 @@
 group = "com.nononsenseapps.gofeed"
-// {x-version-start:.:<current>}
+// x-release-please-start-version
 version = "0.1.3-SNAPSHOT"
-// {x-version-end}
+// x-release-please-end-version
