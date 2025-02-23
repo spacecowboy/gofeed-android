@@ -9,6 +9,8 @@ import (
 
 func ParseBodyString(body string) ([]byte, error) {
 	fp := gofeed.NewParser()
+	// Use custom translator to work around an image quirk
+	fp.RSSTranslator = NewCustomRssTranslator()
 
 	feed, err := fp.ParseString(body)
 
@@ -23,6 +25,8 @@ func ParseBodyString(body string) ([]byte, error) {
 
 func ParseBodyBytes(body []byte) ([]byte, error) {
 	fp := gofeed.NewParser()
+	// Use custom translator to work around an image quirk
+	fp.RSSTranslator = NewCustomRssTranslator()
 
 	feed, err := fp.Parse(bytes.NewReader(body))
 

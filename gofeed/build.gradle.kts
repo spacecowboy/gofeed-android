@@ -28,8 +28,6 @@ tasks {
   }
 
   named("clean") {
-//    group = "build"
-//    description = "Deletes the build directory"
     doLast {
       file("build").deleteRecursively()
     }
@@ -41,14 +39,10 @@ tasks {
   }
 
   named("check") {
-//    group = "verification"
-//    description = "Runs all checks"
     dependsOn("test")
   }
 
   named("build") {
-//    group = "build"
-//    description = "Builds the debug and release AARs"
     dependsOn("bundleDebugAar", "bundleReleaseAar", "check")
   }
 }
@@ -88,8 +82,8 @@ publishing {
     maven {
       name = "MavenCentral"
       url = uri("https://oss.sonatype.org/service/local/staging/deploy/maven2")
-      val nexusUsername: String by project
-      val nexusPassword: String by project
+      val nexusUsername: String? by project
+      val nexusPassword: String? by project
       credentials {
         username = nexusUsername
         password = nexusPassword
