@@ -1,0 +1,13 @@
+{
+  "$schema": "https://raw.githubusercontent.com/spacecowboy/release-please/main/schemas/config.json",
+  "bootstrap-sha": "c51725f44e23021a8baecd81826808b09c1bf066",
+  "release-type": "java",
+  "include-component-in-tag": false,
+  "packages": {
+    ".": {
+      "extra-files": [
+        "build.gradle.kts"
+      ]
+    }
+  }
+}
