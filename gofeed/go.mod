@@ -2,7 +2,7 @@ module github.com/spacecowboy/gofeed-android
 
 go 1.23.0
 
-toolchain go1.24.3
+toolchain go1.24.5
 
 require (
 	github.com/mmcdole/gofeed v1.3.1-0.20250103001757-1a928bdf4a47
