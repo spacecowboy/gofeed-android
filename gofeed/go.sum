@@ -12,6 +12,8 @@ github.com/json-iterator/go v1.1.12 h1:PV8peI4a0ysnczrg+LtxykD8LfKY9ML6u2jnxaEnr
 github.com/json-iterator/go v1.1.12/go.mod h1:e30LSqwooZae/UwlEbR2852Gd8hjQvJoHmT4TnhNGBo=
 github.com/mmcdole/gofeed v1.3.1-0.20250103001757-1a928bdf4a47 h1:WhK9ejmh2JghSZFCxjd59wYbcFWypGMSTRFMkidKwos=
 github.com/mmcdole/gofeed v1.3.1-0.20250103001757-1a928bdf4a47/go.mod h1:9TGv2LcJhdXePDzxiuMnukhV2/zb6VtnZt1mS+SjkLE=
+github.com/mmcdole/gofeed v1.3.1-0.20250526060306-aa3774a4295e h1:kiwN7rn0Iw51Z9kIsNO3+F2SBuUK0CiFsFVQv8hq5SU=
+github.com/mmcdole/gofeed v1.3.1-0.20250526060306-aa3774a4295e/go.mod h1:9TGv2LcJhdXePDzxiuMnukhV2/zb6VtnZt1mS+SjkLE=
 github.com/mmcdole/goxpp v1.1.1 h1:RGIX+D6iQRIunGHrKqnA2+700XMCnNv0bAOOv5MUhx8=
 github.com/mmcdole/goxpp v1.1.1/go.mod h1:v+25+lT2ViuQ7mVxcncQ8ch1URund48oH+jhjiwEgS8=
 github.com/modern-go/concurrent v0.0.0-20180228061459-e0a39a4cb421/go.mod h1:6dJC0mAP4ikYIbvyc7fijjWJddQyLn8Ig3JB5CqoB9Q=
