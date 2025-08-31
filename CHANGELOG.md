@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.2](https://github.com/spacecowboy/gofeed-android/compare/v0.2.1...v0.2.2) (2025-08-31)
+
+
+### Bug Fixes
+
+* **deps:** update golang.org/x/mobile digest to d5bb5ec ([#39](https://github.com/spacecowboy/gofeed-android/issues/39)) ([03eeffd](https://github.com/spacecowboy/gofeed-android/commit/03eeffdbb0d0a1c4c5a74a5b9405f428a06eb50b))
+
 ## [0.2.1](https://github.com/spacecowboy/gofeed-android/compare/v0.2.0...v0.2.1) (2025-06-02)
 
 
