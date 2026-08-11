@@ -96,9 +96,50 @@ publishing {
         password = nexusPassword
       }
     }
+    maven {
+      name = "GitHubPackages"
+      url = uri("https://maven.pkg.github.com/spacecowboy/gofeed-android")
+      credentials {
+        username = System.getenv("GITHUB_ACTOR")
+        password = System.getenv("GITHUB_TOKEN")
+      }
+    }
   }
   publications {
-    create<MavenPublication>("maven") {
+    create<MavenPublication>("ossrh") {
+      groupId = rootProject.group.toString()
+      artifactId = "gofeed-android"
+      version = rootProject.version.toString()
+
+      artifact(releaseArtifact)
+
+      pom {
+        name.set("gofeed-android")
+        description.set("Android bindings for Gofeed")
+        url.set("https://github.com/spacecowboy/gofeed-android")
+        licenses {
+          license {
+            name.set("MIT")
+            url.set("https://opensource.org/licenses/MIT")
+          }
+        }
+        developers {
+          developer {
+            id.set("spacecowboy")
+            name.set("Jonas Kalderstam")
+            email.set("jonas@cowboyprogrammer.org")
+          }
+        }
+        scm {
+            connection.set("scm:git:git://github.com/spacecowboy/gofeed-android.git")
+            developerConnection.set("scm:git:ssh://github.com/spacecowboy/gofeed-android.git")
+            url.set("https://github.com/spacecowboy/gofeed-android")
+        }
+      }
+    }
+  }
+  publications {
+    create<MavenPublication>("gpr") {
       groupId = rootProject.group.toString()
       artifactId = "gofeed-android"
       version = rootProject.version.toString()
@@ -134,5 +175,16 @@ publishing {
 
 signing {
   useGpgCmd()
-  sign(publishing.publications.findByName("maven"))
+  sign(publishing.publications.findByName("ossrh"))
+}
+
+// The maven-publish plugin creates a publish task for every
+// publication x repository combination. Restrict each publication
+// to its intended repository so `gpr` only goes to GitHubPackages
+// and `ossrh` only goes to MavenCentral.
+tasks.withType<PublishToMavenRepository>().configureEach {
+  onlyIf {
+    (publication.name == "gpr" && repository.name == "GitHubPackages") ||
+      (publication.name == "ossrh" && repository.name == "MavenCentral")
+  }
 }
