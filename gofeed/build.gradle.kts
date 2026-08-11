@@ -87,8 +87,8 @@ val releaseArtifact = project.artifacts.add("gomobile", releaseAarFile) {
 publishing {
   repositories {
     maven {
-      name = "MavenCentral"
-      url = uri("https://oss.sonatype.org/service/local/staging/deploy/maven2")
+      name = "ossrh"
+      url = uri("https://ossrh-staging-api.central.sonatype.com/service/local/staging/deploy/maven2/")
       val nexusUsername: String? by project
       val nexusPassword: String? by project
       credentials {
@@ -185,6 +185,6 @@ signing {
 tasks.withType<PublishToMavenRepository>().configureEach {
   onlyIf {
     (publication.name == "gpr" && repository.name == "GitHubPackages") ||
-      (publication.name == "ossrh" && repository.name == "MavenCentral")
+      (publication.name == "ossrh" && repository.name == "ossrh")
   }
 }

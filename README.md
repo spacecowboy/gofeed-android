@@ -30,13 +30,13 @@ gomobile init
 ./gradlew bundleReleaseAar
 ```
 
-## Publishing
+## Publishing to Maven Central
 
 ```
-./gradlew publish
+./publish.sh
 ```
 
-Then go to https://oss.sonatype.org/#stagingRepositories and close and release the repository.
+Then go to https://central.sonatype.com/publishing/deployments and publish the component. Note that this can't be done in CI due to GPG signing.
 
 ## Updating gofeed
 
