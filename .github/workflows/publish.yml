@@ -1,0 +1,41 @@
+name: Build
+
+on:
+  release:
+    types: [created]
+  workflow_dispatch:
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+    - uses: actions/checkout@v7
+
+    - name: Set up Go
+      uses: actions/setup-go@v7
+      with:
+        go-version: '1.26'
+        cache-dependency-path: gofeed/go.sum
+
+    - name: Install gomobile
+      run: |
+        go install golang.org/x/mobile/cmd/gomobile@latest
+        gomobile init
+
+    - name: setup JDK
+      uses: actions/setup-java@v5
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+
+    - name: gradle setup
+      uses: gradle/actions/setup-gradle@v6
+
+    - name: publish to github packages
+      # Specify the package to publish so we don't try to publish to maven central here
+      run: ./gradlew :gofeed:publishGprPublicationToGitHubPackagesRepository
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
