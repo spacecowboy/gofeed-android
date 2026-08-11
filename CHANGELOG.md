@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.4](https://github.com/spacecowboy/gofeed-android/compare/v0.2.3...v0.2.4) (2026-08-11)
+
+
+### Bug Fixes
+
+* clean up dependencies with go mod tidy ([3170e5f](https://github.com/spacecowboy/gofeed-android/commit/3170e5f1bb38ede00d89bdd734049ef2a29facd8))
+
 ## [0.2.3](https://github.com/spacecowboy/gofeed-android/compare/v0.2.2...v0.2.3) (2026-08-11)
 
 
