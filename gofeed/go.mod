@@ -6,7 +6,7 @@ toolchain go1.26.5
 
 require (
 	github.com/mmcdole/gofeed v1.4.1
-	golang.org/x/mobile v0.0.0-20260803200217-62cee1672c8e
+	golang.org/x/mobile v0.0.0-20260811163000-1769bbc171f0
 )
 
 require (
