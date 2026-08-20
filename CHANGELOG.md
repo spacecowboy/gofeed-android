@@ -1,5 +1,21 @@
 # Changelog
 
+## [0.2.5](https://github.com/spacecowboy/gofeed-android/compare/v0.2.4...v0.2.5) (2026-08-20)
+
+
+### Bug Fixes
+
+* added workaround for JSON parsing bug ([#76](https://github.com/spacecowboy/gofeed-android/issues/76)) ([16adbf4](https://github.com/spacecowboy/gofeed-android/commit/16adbf44ae71d14b9cbacafa3f90f34b74f766d5))
+* **deps:** update golang.org/x/mobile digest to 1769bbc ([#71](https://github.com/spacecowboy/gofeed-android/issues/71)) ([67dded1](https://github.com/spacecowboy/gofeed-android/commit/67dded178ae1ec5ff014da61d1fe9fa36b108dcb))
+* **deps:** update golang.org/x/mobile digest to 8e8303b ([#73](https://github.com/spacecowboy/gofeed-android/issues/73)) ([34d887f](https://github.com/spacecowboy/gofeed-android/commit/34d887f605f3900fb4f9f12b31fefa7a74137f18))
+* **deps:** update module github.com/stretchr/testify to v1.12.1 ([#77](https://github.com/spacecowboy/gofeed-android/issues/77)) ([75d26a2](https://github.com/spacecowboy/gofeed-android/commit/75d26a29a9def162a6b6419292c7b13fd98cb17a))
+
+
+### Build System and CI/CD
+
+* add CI step to run go tests ([#78](https://github.com/spacecowboy/gofeed-android/issues/78)) ([c9e884b](https://github.com/spacecowboy/gofeed-android/commit/c9e884b12d93a878be89e4320b127ae27f677804))
+* reference all go files in gradle tasks ([#79](https://github.com/spacecowboy/gofeed-android/issues/79)) ([862cae4](https://github.com/spacecowboy/gofeed-android/commit/862cae46d822ad95a12dd5b6334189dcb70629c4))
+
 ## [0.2.4](https://github.com/spacecowboy/gofeed-android/compare/v0.2.3...v0.2.4) (2026-08-11)
 
 
