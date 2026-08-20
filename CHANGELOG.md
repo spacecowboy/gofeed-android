@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.2.6](https://github.com/spacecowboy/gofeed-android/compare/v0.2.5...v0.2.6) (2026-08-20)
+
+
+### Bug Fixes
+
+* **deps:** upgrade gofeed to v1.4.2 and fix parsing bugs ([#84](https://github.com/spacecowboy/gofeed-android/issues/84)) ([3c1a58c](https://github.com/spacecowboy/gofeed-android/commit/3c1a58cecccbd5adb089fff31e594231badd26a5))
+
+
+### Build System and CI/CD
+
+* added final echo to publish script ([#82](https://github.com/spacecowboy/gofeed-android/issues/82)) ([0562326](https://github.com/spacecowboy/gofeed-android/commit/0562326f71d8ac93bb79fb2b348b10d3d54b270d))
+* adjust publish pipeline trigger ([#80](https://github.com/spacecowboy/gofeed-android/issues/80)) ([688400f](https://github.com/spacecowboy/gofeed-android/commit/688400f1d89fbf7c6fc674a6a750daf268014e69))
+
 ## [0.2.5](https://github.com/spacecowboy/gofeed-android/compare/v0.2.4...v0.2.5) (2026-08-20)
 
 
