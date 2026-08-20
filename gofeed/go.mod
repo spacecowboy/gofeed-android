@@ -5,7 +5,7 @@ go 1.25.0
 toolchain go1.26.5
 
 require (
-	github.com/mmcdole/gofeed v1.4.1
+	github.com/mmcdole/gofeed v1.4.2
 	github.com/stretchr/testify v1.12.1
 	golang.org/x/mobile v0.0.0-20260820023541-8e8303b9da6c
 )
