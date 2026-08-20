@@ -30,6 +30,10 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
 
+    - name: go tests
+      working-directory: ./gofeed
+      run: go test ./...
+
     - name: gradle setup
       uses: gradle/actions/setup-gradle@v6
 
