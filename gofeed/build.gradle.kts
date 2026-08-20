@@ -6,6 +6,11 @@ plugins {
 val releaseAarFile = project.buildDir.resolve("outputs/aar/lib-release.aar")
 val minSdk = 23
 
+val goSources = fileTree(project.projectDir) {
+  include("**/*.go", "go.mod", "go.sum")
+  exclude("build/**")
+}
+
 tasks {
   register("bundleDebugAar", Exec::class.java) {
     group = "build"
@@ -18,11 +23,7 @@ tasks {
       project.buildDir.resolve("outputs/aar/lib-debug-sources.jar"),
     )
 
-    inputs.files(
-      project.projectDir.resolve("export.go"),
-      project.projectDir.resolve("go.mod"),
-      project.projectDir.resolve("go.sum"),
-    )
+    inputs.files(goSources)
 
     // Important to align to 16KB page size for Android
     // Set the flags with environment variable because commandline argument does not support memory alignment flags to the linker
@@ -62,11 +63,7 @@ val bundleReleaseAar = tasks.register("bundleReleaseAar", Exec::class.java) {
     project.buildDir.resolve("outputs/aar/lib-release-sources.jar"),
   )
 
-  inputs.files(
-    project.projectDir.resolve("export.go"),
-    project.projectDir.resolve("go.mod"),
-    project.projectDir.resolve("go.sum"),
-  )
+  inputs.files(goSources)
 
   // Important to align to 16KB page size for Android
   // Set the flags with environment variable because commandline argument does not support memory alignment flags to the linker
