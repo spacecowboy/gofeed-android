@@ -34,3 +34,6 @@ fi
 curl --request POST \
     --url "https://ossrh-staging-api.central.sonatype.com/manual/upload/defaultRepository/com.nononsenseapps.gofeed?publishing_type=user_managed" \
     --header "Authorization: Bearer $(printf '%s' "$NEXUS_USERNAME:$NEXUS_PASSWORD" | base64 -w0)"
+
+
+echo "Now go here: https://central.sonatype.com/publishing/deployments"
