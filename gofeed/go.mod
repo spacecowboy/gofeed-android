@@ -1,13 +1,13 @@
 module github.com/spacecowboy/gofeed-android
 
-go 1.25.0
+go 1.26.0
 
 toolchain go1.26.5
 
 require (
 	github.com/mmcdole/gofeed v1.4.2
 	github.com/stretchr/testify v1.12.1
-	golang.org/x/mobile v0.0.0-20260820023541-8e8303b9da6c
+	golang.org/x/mobile v0.0.0-20260821190718-4776eadac327
 )
 
 require (
