@@ -10,5 +10,18 @@
       "matchUpdateTypes": ["patch"],
       "automerge": true
     }
+  ],
+  "customManagers": [
+    {
+      "customType": "regex",
+      "managerFilePatterns": [
+        "*.yml"
+      ],
+      "matchStrings": [
+        "go install golang.org/x/mobile/cmd/gomobile@(?<currentValue>.*?)\\s"
+      ],
+      "depNameTemplate": "gomobile",
+      "datasourceTemplate": "go"
+    }
   ]
 }

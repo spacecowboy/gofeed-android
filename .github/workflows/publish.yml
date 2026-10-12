@@ -22,7 +22,7 @@ jobs:
 
     - name: Install gomobile
       run: |
-        go install golang.org/x/mobile/cmd/gomobile@latest
+        go install golang.org/x/mobile/cmd/gomobile@v0.0.0-20260820023541-8e8303b9da6c
         gomobile init
 
     - name: setup JDK
