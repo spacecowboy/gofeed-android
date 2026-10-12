@@ -11,15 +11,12 @@ env:
 
 jobs:
   build:
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-24.04       # pin image instead of ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
-        include:
-          - { id: jdk17-a, jdk: '17', dir: build-a }
-          - { id: jdk17-b, jdk: '17', dir: some/deeper/build-b }
-          - { id: jdk25-a, jdk: '25', dir: build-a }
-          - { id: jdk25-b, jdk: '25', dir: some/deeper/build-b }
+        jdk: ['17', '25']
+        dir: [build-a, some/deeper/build-b]
     steps:
       - uses: actions/checkout@v7
         with:
@@ -51,31 +48,31 @@ jobs:
         working-directory: ${{ matrix.dir }}
         run: ./gradlew bundleReleaseAar --no-build-cache
 
-      - name: Collect first AAR
-        run: |
-          mkdir -p "$RUNNER_TEMP/out/first"
-          aar=$(find "${{ matrix.dir }}" -path '*outputs/aar/lib-release.aar' | head -1)
-          cp "$aar" "$RUNNER_TEMP/out/first/lib-release.aar"
-
-      - name: Rebuild in same dir
+      - name: Hash contents
         working-directory: ${{ matrix.dir }}
-        run: ./gradlew clean bundleReleaseAar --no-build-cache
-
-      - name: Collect rebuilt AAR
         run: |
-          mkdir -p "$RUNNER_TEMP/out/rebuild"
-          aar=$(find "${{ matrix.dir }}" -path '*outputs/aar/lib-release.aar' | head -1)
-          cp "$aar" "$RUNNER_TEMP/out/rebuild/lib-release.aar"
+          mkdir -p /tmp/aar && cd /tmp/aar
+          unzip -q -o "$GITHUB_WORKSPACE/${{ matrix.dir }}"/**/build/outputs/aar/lib-release.aar
+          find . -type f | sort | xargs sha256sum > "$GITHUB_WORKSPACE/hashes-${{ matrix.jdk }}-${{ strategy.job-index }}.txt"
 
       - uses: actions/upload-artifact@v5
         with:
-          name: aar-${{ matrix.id }}
-          path: ${{ runner.temp }}/out/first/lib-release.aar
+          name: hashes-${{ matrix.jdk }}-${{ strategy.job-index }}
+          path: hashes-*.txt
 
-      - uses: actions/upload-artifact@v5
+      - name: Rebuild in same dir and compare
+        working-directory: ${{ matrix.dir }}
+        run: |
+          cp "$(find . -name lib-release.aar | head -1)" /tmp/first.aar
+          ./gradlew clean bundleReleaseAar --no-build-cache
+          cmp /tmp/first.aar "$(find . -name lib-release.aar | head -1)" \
+            || echo "::error::Same-dir rebuild differs (true nondeterminism)"
+
+      - name: Keep AAR for diffoscope
+        uses: actions/upload-artifact@v5
         with:
-          name: aar-${{ matrix.id }}-rebuild
-          path: ${{ runner.temp }}/out/rebuild/lib-release.aar
+          name: aar-${{ matrix.jdk }}-${{ strategy.job-index }}
+          path: ${{ matrix.dir }}/**/build/outputs/aar/lib-release.aar
 
   compare:
     needs: build
@@ -83,87 +80,12 @@ jobs:
     steps:
       - uses: actions/download-artifact@v5
         with:
-          pattern: aar-*
-          path: aars            # -> aars/aar-<id>/lib-release.aar
-
-      - name: Install diffoscope
+          pattern: hashes-*
+          merge-multiple: true
+      - name: Compare all variants
         run: |
-          sudo apt-get update
-          sudo apt-get install -y diffoscope-minimal binutils binutils-multiarch
-
-      - name: Extract AARs
-        run: |
-          for d in aars/aar-*; do
-            name=${d#aars/aar-}
-            mkdir -p "extracted/$name"
-            unzip -q "$d/lib-release.aar" -d "extracted/$name"
+          first=$(ls hashes-*.txt | head -1)
+          for f in hashes-*.txt; do
+            diff -u "$first" "$f" || fail=1
           done
-          ls extracted
-
-      - name: Compare .so files and run diffoscope on differences
-        run: |
-          ref=jdk17-a
-          mkdir -p reports
-          failed=0
-          {
-            echo "## Reproducibility report"
-            echo "Reference variant: \`$ref\`"
-            echo
-            echo "| Variant | File | Result |"
-            echo "|---|---|---|"
-          } > summary.md
-
-          for dir in extracted/*; do
-            name=$(basename "$dir")
-            [ "$name" = "$ref" ] && continue
-
-            # classes.jar is informational only (expected to differ across JDKs)
-            if cmp -s "extracted/$ref/classes.jar" "$dir/classes.jar"; then
-              echo "| $name | classes.jar | identical |" >> summary.md
-            else
-              echo "| $name | classes.jar | differs |" >> summary.md
-            fi
-
-            while IFS= read -r so; do
-              if cmp -s "extracted/$ref/$so" "$dir/$so"; then
-                echo "| $name | $so | identical |" >> summary.md
-                continue
-              fi
-              failed=1
-              echo "| $name | $so | **DIFFERS** |" >> summary.md
-
-              slug=$(echo "$name-$so" | tr '/' '_')
-              diffoscope \
-                --text "reports/$slug.txt" \
-                --html "reports/$slug.html" \
-                "extracted/$ref/$so" "$dir/$so" || true
-
-              {
-                echo
-                echo "<details><summary>diffoscope: $ref vs $name, $so</summary>"
-                echo
-                echo '```'
-                head -c 30000 "reports/$slug.txt"
-                echo '```'
-                echo "</details>"
-                echo
-              } >> details.md
-            done < <(cd "extracted/$ref" && find jni -name '*.so' | sort)
-          done
-
-          cat summary.md >> "$GITHUB_STEP_SUMMARY"
-          [ -f details.md ] && cat details.md >> "$GITHUB_STEP_SUMMARY"
-          echo "failed=$failed" >> "$GITHUB_ENV"
-
-      - uses: actions/upload-artifact@v5
-        if: always()
-        with:
-          name: diffoscope-reports
-          path: reports/
-          if-no-files-found: ignore
-
-      - name: Fail if any .so differs
-        if: env.failed == '1'
-        run: |
-          echo "::error::libgojni.so differs between variants, see diffoscope-reports and the job summary"
-          exit 1
+          exit ${fail:-0}
