@@ -15,12 +15,13 @@
     {
       "customType": "regex",
       "managerFilePatterns": [
-        "*.yml"
+        ".github/workflows/*.{yml,yaml}"
       ],
       "matchStrings": [
-        "go install golang.org/x/mobile/cmd/gomobile@(?<currentValue>.*?)\\s"
+        "go install golang.org/x/mobile/cmd/gomobile@(?<currentValue>\\S+)"
       ],
       "depNameTemplate": "golang.org/x/mobile",
+      "packageNameTemplate": "golang.org/x/mobile",
       "datasourceTemplate": "go"
     }
   ]
