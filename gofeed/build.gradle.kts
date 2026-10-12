@@ -78,6 +78,7 @@ val bundleReleaseAar = tasks.register("bundleReleaseAar", Exec::class.java) {
   // Important to align to 16KB page size for Android
   // Set the flags with environment variable because commandline argument does not support memory alignment flags to the linker
   // Remove buildId to make build more reproducible"
+  environment["GO_FLAGS"] = "-buildvcs=false"
   environment["CGO_LDFLAGS"] = "-Wl,-z,max-page-size=16384,--build-id=none"
   environment["CGO_CFLAGS"] = "-O2 -s -w -ffile-prefix-map=$projectDir=."
   commandLine(
