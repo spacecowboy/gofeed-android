@@ -85,7 +85,7 @@ val bundleReleaseAar = tasks.register("bundleReleaseAar", Exec::class.java) {
     "bind",
     "-v",
     // remove stuff which might affect reproducible builds
-    // "-trimpath",
+    "-trimpath",
     "-androidapi",
     "$minSdk",
     "-o",
