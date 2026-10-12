@@ -9,14 +9,16 @@
     {
       "matchUpdateTypes": ["patch"],
       "automerge": true
+    },
+    {
+      "groupName": "gomobile",
+      "matchPackageNames": ["/^gomobile/"]
     }
   ],
   "customManagers": [
     {
       "customType": "regex",
-      "managerFilePatterns": [
-        ".github/workflows/*.{yml,yaml}"
-      ],
+      "managerFilePatterns": [".github/workflows/*.{yml,yaml}"],
       "matchStrings": [
         "go install golang.org/x/mobile/cmd/gomobile@(?<currentValue>\\S+)"
       ],
