@@ -80,13 +80,14 @@ val bundleReleaseAar = tasks.register("bundleReleaseAar", Exec::class.java) {
   // Remove buildId to make build more reproducible"
   environment["GOFLAGS"] = "-buildvcs=false"
   environment["CGO_LDFLAGS"] = "-Wl,-z,max-page-size=16384,--build-id=none"
-  environment["CGO_CFLAGS"] = "-O2 -s -w -ffile-prefix-map=$projectDir=."
+  environment["CGO_CFLAGS"] = "-O2"
   commandLine(
     "gomobile",
     "bind",
     "-v",
     // remove stuff which might affect reproducible builds
     "-trimpath",
+    "-ldflags=-s -w -buildid=",
     "-androidapi",
     "$minSdk",
     "-o",
