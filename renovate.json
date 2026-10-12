@@ -20,7 +20,7 @@
       "matchStrings": [
         "go install golang.org/x/mobile/cmd/gomobile@(?<currentValue>.*?)\\s"
       ],
-      "depNameTemplate": "gomobile",
+      "depNameTemplate": "golang.org/x/mobile",
       "datasourceTemplate": "go"
     }
   ]
