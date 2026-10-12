@@ -9,10 +9,6 @@
     {
       "matchUpdateTypes": ["patch"],
       "automerge": true
-    },
-    {
-      "groupName": "gomobile",
-      "matchPackageNames": ["golang.org/x/mobile"]
     }
   ],
   "customManagers": [
