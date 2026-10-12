@@ -28,7 +28,17 @@ tasks {
     // Important to align to 16KB page size for Android
     // Set the flags with environment variable because commandline argument does not support memory alignment flags to the linker
     environment["CGO_LDFLAGS"] = "-Wl,-z,max-page-size=16384"
-    commandLine("gomobile", "bind", "-v", "-androidapi", "$minSdk", "-o", "$aar", "-target=android", "github.com/spacecowboy/gofeed-android")
+    commandLine(
+      "gomobile",
+      "bind",
+      "-v",
+      "-androidapi",
+      "$minSdk",
+      "-o",
+      "$aar",
+      "-target=android",
+      "github.com/spacecowboy/gofeed-android",
+    )
   }
 
   named("clean") {
@@ -67,9 +77,24 @@ val bundleReleaseAar = tasks.register("bundleReleaseAar", Exec::class.java) {
 
   // Important to align to 16KB page size for Android
   // Set the flags with environment variable because commandline argument does not support memory alignment flags to the linker
-  environment["CGO_LDFLAGS"] = "-Wl,-z,max-page-size=16384"
-  environment["CGO_CFLAGS"] = "-O2 -g -s -w"
-  commandLine("gomobile", "bind", "-v", "-androidapi", "$minSdk", "-o", "$aar", "-target=android", "github.com/spacecowboy/gofeed-android")
+  // Remove buildId to make build more reproducible"
+  environment["GOFLAGS"] = "-buildvcs=false"
+  environment["CGO_LDFLAGS"] = "-Wl,-z,max-page-size=16384,--build-id=none"
+  environment["CGO_CFLAGS"] = "-O2"
+  commandLine(
+    "gomobile",
+    "bind",
+    "-v",
+    // remove stuff which might affect reproducible builds
+    "-trimpath",
+    "-ldflags=-s -w -buildid=",
+    "-androidapi",
+    "$minSdk",
+    "-o",
+    "$aar",
+    "-target=android",
+    "github.com/spacecowboy/gofeed-android",
+  )
 }
 
 configurations {
