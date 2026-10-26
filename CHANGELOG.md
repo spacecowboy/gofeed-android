@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.7](https://github.com/spacecowboy/gofeed-android/compare/v0.2.6...v0.2.7) (2026-10-26)
+
+
+### Bug Fixes
+
+* fixed parsing of Content in RSS feeds with a description also ([#102](https://github.com/spacecowboy/gofeed-android/issues/102)) ([ffe85d8](https://github.com/spacecowboy/gofeed-android/commit/ffe85d846d2a10e1d7eac318acf768486bc4fa24))
+
 ## [0.2.6](https://github.com/spacecowboy/gofeed-android/compare/v0.2.5...v0.2.6) (2026-08-20)
 
 

@@ -1,4 +1,4 @@
 group = "com.nononsenseapps.gofeed"
 // x-release-please-start-version
-version = "0.2.6"
+version = "0.2.7"
 // x-release-please-end-version
