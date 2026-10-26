@@ -29,10 +29,15 @@ func (ct *CustomRssTranslator) Translate(feed interface{}) (*gofeed.Feed, error)
 		return nil, err
 	}
 
-	// Override the item image logic
 	for i, item := range f.Items {
+		// Override the item image logic
 		if item.Image != nil {
 			item.Image = ct.translateItemImage(rss.Items[i])
+		}
+
+		// Ensure content is populated
+		if customContent, ok := item.Custom["content"]; item.Content == "" && ok {
+			item.Content = customContent
 		}
 	}
 
