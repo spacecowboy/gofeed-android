@@ -1,41 +1,91 @@
-name: Build
-
+name: Reproducible build check
 
 on:
-  push:
-    branches:
-      - main
   pull_request:
+  push:
+    branches: [main]
+
+env:
+  GO_VERSION: '1.27.1'          # pin exact
+  NDK_VERSION: '27.2.12479018'  # pin exact, match F-Droid's
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04       # pin image instead of ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        jdk: ['17', '25']
+        dir: [build-a, some/deeper/build-b]
     steps:
-    - uses: actions/checkout@v7
+      - uses: actions/checkout@v7
+        with:
+          path: ${{ matrix.dir }}
 
-    - name: Set up Go
-      uses: actions/setup-go@v7
-      with:
-        go-version: '1.27'
-        cache-dependency-path: gofeed/go.sum
+      - uses: actions/setup-go@v7
+        with:
+          go-version: ${{ env.GO_VERSION }}
+          cache-dependency-path: ${{ matrix.dir }}/gofeed/go.sum
 
-    - name: Install gomobile
-      run: |
-        go install golang.org/x/mobile/cmd/gomobile@v0.0.0-20261011034528-197770444867
-        gomobile init
+      - uses: actions/setup-java@v6
+        with:
+          java-version: ${{ matrix.jdk }}
+          distribution: temurin
 
-    - name: setup JDK
-      uses: actions/setup-java@v6
-      with:
-        java-version: '17'
-        distribution: 'temurin'
+      - name: Install NDK
+        run: |
+          yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" "ndk;${NDK_VERSION}"
+          echo "ANDROID_NDK_HOME=$ANDROID_HOME/ndk/${NDK_VERSION}" >> "$GITHUB_ENV"
 
-    - name: go tests
-      working-directory: ./gofeed
-      run: go test ./...
+      - name: Install gomobile
+        run: |
+          go install golang.org/x/mobile/cmd/gomobile@v0.0.0-20261011034528-197770444867
+          gomobile init
 
-    - name: gradle setup
-      uses: gradle/actions/setup-gradle@v6
+      - uses: gradle/actions/setup-gradle@v6
 
-    - name: build
-      run: ./gradlew build
+      - name: Build release AAR
+        working-directory: ${{ matrix.dir }}
+        run: ./gradlew bundleReleaseAar --no-build-cache
+
+      - name: Hash contents
+        working-directory: ${{ matrix.dir }}
+        run: |
+          mkdir -p /tmp/aar && cd /tmp/aar
+          unzip -q -o "$GITHUB_WORKSPACE/${{ matrix.dir }}"/**/build/outputs/aar/lib-release.aar
+          find . -type f | sort | xargs sha256sum > "$GITHUB_WORKSPACE/hashes-${{ matrix.jdk }}-${{ strategy.job-index }}.txt"
+
+      - uses: actions/upload-artifact@v5
+        with:
+          name: hashes-${{ matrix.jdk }}-${{ strategy.job-index }}
+          path: hashes-*.txt
+
+      - name: Rebuild in same dir and compare
+        working-directory: ${{ matrix.dir }}
+        run: |
+          cp "$(find . -name lib-release.aar | head -1)" /tmp/first.aar
+          ./gradlew clean bundleReleaseAar --no-build-cache
+          cmp /tmp/first.aar "$(find . -name lib-release.aar | head -1)" \
+            || echo "::error::Same-dir rebuild differs (true nondeterminism)"
+
+      - name: Keep AAR for diffoscope
+        uses: actions/upload-artifact@v5
+        with:
+          name: aar-${{ matrix.jdk }}-${{ strategy.job-index }}
+          path: ${{ matrix.dir }}/**/build/outputs/aar/lib-release.aar
+
+  compare:
+    needs: build
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/download-artifact@v5
+        with:
+          pattern: hashes-*
+          merge-multiple: true
+      - name: Compare all variants
+        run: |
+          first=$(ls hashes-*.txt | head -1)
+          for f in hashes-*.txt; do
+            diff -u "$first" "$f" || fail=1
+          done
+          exit ${fail:-0}
