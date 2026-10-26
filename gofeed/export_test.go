@@ -121,6 +121,51 @@ func TestCowboyJson(t *testing.T) {
 	assert.NoError(t, err)
 }
 
+
+func TestContentIsRetained(t *testing.T) {
+	rss := `<rss version="2.0">
+  <channel>
+    <title>Index.hr RSS Feed</title>
+    <link>https://www.index.hr/rss</link>
+    <description>Index.hr RSS Feed</description>
+    <copyright>(c) 2026</copyright>
+    <item>
+      <title>Belgija odgodila zabranu pušenja na terasama kafića</title>
+      <link>https://www.index.hr/vijesti/clanak/belgija-odgodila-zabranu-pusenja-na-terasama-kafica/2850006.aspx</link>
+      <content><![CDATA[<img src="https://bucket.index.hr/b/index/8614caa6-f80f-4ee3-9f9a-abd0588407a1.png"/> BELGIJSKA vlada odgodila je zabranu pušenja na terasama ugostiteljskih objekata, koja je trebala stupiti na snagu 2027. Odluka je donesena nakon intervencije suda kako bi se sektoru dalo vremena za prilagodbu.]]></content>
+      <description>BELGIJSKA vlada odgodila je zabranu pušenja na terasama ugostiteljskih objekata, koja je trebala stupiti na snagu 2027. Odluka je donesena nakon intervencije suda kako bi se sektoru dalo vremena za prilagodbu.</description>
+      <category>Vijesti</category>
+      <guid>https://www.index.hr/vijesti/clanak/belgija-odgodila-zabranu-pusenja-na-terasama-kafica/2850006.aspx</guid>
+      <pubDate>Mon, 26 Oct 2026 17:09:18 +0100</pubDate>
+    </item>
+  </channel>
+</rss>
+`
+
+	_, err := ParseBodyBytes([]byte(rss))
+
+	assert.NoError(t, err)
+
+	fp := gofeed.NewParser()
+	// Use custom translator to work around an image quirk
+	fp.RSSTranslator = NewCustomRssTranslator()
+
+	parsedFeed, err := fp.Parse(strings.NewReader(rss))
+	assert.NoError(t, err)
+
+	assert.Equal(t, 1, len(parsedFeed.Items))
+
+	item := parsedFeed.Items[0]
+
+	assert.Equal(
+		t,
+		"<img src=\"https://bucket.index.hr/b/index/8614caa6-f80f-4ee3-9f9a-abd0588407a1.png\"/> BELGIJSKA vlada odgodila je zabranu pušenja na terasama ugostiteljskih objekata, koja je trebala stupiti na snagu 2027. Odluka je donesena nakon intervencije suda kako bi se sektoru dalo vremena za prilagodbu.",
+		item.Custom["content"],
+	)
+	// Content is populated, this is what becomes available in Java
+	assert.Equal(t, "<img src=\"https://bucket.index.hr/b/index/8614caa6-f80f-4ee3-9f9a-abd0588407a1.png\"/> BELGIJSKA vlada odgodila je zabranu pušenja na terasama ugostiteljskih objekata, koja je trebala stupiti na snagu 2027. Odluka je donesena nakon intervencije suda kako bi se sektoru dalo vremena za prilagodbu.", item.Content)
+}
+
 func TestUkrNet(t *testing.T) {
 	ukr := `<?xml version="1.0" encoding="UTF-8"?>
 <rss xmlns="https://cyber.harvard.edu/rss/rss.html" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
