@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.8](https://github.com/spacecowboy/gofeed-android/compare/v0.2.7...v0.2.8) (2026-10-26)
+
+
+### Build System and CI/CD
+
+* update publishing script to handle ipv4 issue ([#104](https://github.com/spacecowboy/gofeed-android/issues/104)) ([8c4e031](https://github.com/spacecowboy/gofeed-android/commit/8c4e03149d6c1bb4b450cea664ea4bcb407def8c))
+
 ## [0.2.7](https://github.com/spacecowboy/gofeed-android/compare/v0.2.6...v0.2.7) (2026-10-26)
 
 
