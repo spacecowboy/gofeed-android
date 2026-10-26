@@ -31,9 +31,29 @@ fi
 
 ./gradlew publishOssrhPublicationToOssrhRepository
 
-curl --request POST \
-    --url "https://ossrh-staging-api.central.sonatype.com/manual/upload/defaultRepository/com.nononsenseapps.gofeed?publishing_type=user_managed" \
-    --header "Authorization: Bearer $(printf '%s' "$NEXUS_USERNAME:$NEXUS_PASSWORD" | base64 -w0)"
+URL="https://ossrh-staging-api.central.sonatype.com/manual/upload/defaultRepository/com.nononsenseapps.gofeed?publishing_type=automatic"
+AUTH="$(printf '%s' "$NEXUS_USERNAME:$NEXUS_PASSWORD" | base64 -w0)"
 
+upload() {
+    # Extra curl args (e.g. --ipv4) are passed through as arguments.
+    # --fail-with-body makes curl exit non-zero on HTTP >= 400 but still print the body.
+    curl --silent --show-error --fail-with-body \
+        --request POST \
+        --url "$URL" \
+        --header "Authorization: Bearer $AUTH" \
+        "$@"
+}
 
+if upload; then
+    echo
+    echo "Upload succeeded"
+else
+    echo >&2
+    echo "Upload failed, retrying with IPv4 forced..." >&2
+    upload --ipv4
+    echo
+    echo "Upload succeeded (IPv4)"
+fi
+
+echo
 echo "Now go here: https://central.sonatype.com/publishing/deployments"
